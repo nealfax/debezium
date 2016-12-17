@@ -202,7 +202,7 @@ public class SnapshotReader extends AbstractReader {
             // for all databases with a global read lock, and it prevents ALL updates while we have this lock.
             // It also ensures that everything we do while we have this lock will be consistent.
             long lockAcquired = clock.currentTimeInMillis();
-            logger.info("Step 2: flush and obtain global read lock (preventing writes to database)");
+            logger.info("Step 2: flush and obtain global read lock (preventing writes to database!)");
             sql.set("FLUSH TABLES neal_test.category WITH READ LOCK");
             mysql.execute(sql.get());
 
