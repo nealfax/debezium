@@ -35,7 +35,7 @@ import io.debezium.util.Strings;
 
 /**
  * A component that performs a snapshot of a MySQL server, and records the schema changes in {@link MySqlSchema}.
- * 
+ *
  * @author Randall Hauch
  */
 public class SnapshotReader extends AbstractReader {
@@ -49,7 +49,7 @@ public class SnapshotReader extends AbstractReader {
 
     /**
      * Create a snapshot reader.
-     * 
+     *
      * @param context the task context in which this reader is running; may not be null
      */
     public SnapshotReader(MySqlTaskContext context) {
@@ -63,7 +63,7 @@ public class SnapshotReader extends AbstractReader {
     /**
      * Set the non-blocking function that should be called upon successful completion of the snapshot, which is after the
      * snapshot generates its final record <em>and</em> all such records have been {@link #poll() polled}.
-     * 
+     *
      * @param onSuccessfulCompletion the function; may be null
      * @return this object for method chaining; never null
      */
@@ -77,7 +77,7 @@ public class SnapshotReader extends AbstractReader {
      * releasing the read lock as early as possible. Although the snapshot process should obtain a consistent snapshot even
      * when releasing the lock as early as possible, it may be desirable to explicitly hold onto the read lock until execution
      * completes. In such cases, holding onto the lock will prevent all updates to the database during the snapshot process.
-     * 
+     *
      * @param minimalBlocking {@code true} if the lock is to be released as early as possible, or {@code false} if the lock
      *            is to be held for the entire {@link #execute() execution}
      * @return this object for method chaining; never null
@@ -90,7 +90,7 @@ public class SnapshotReader extends AbstractReader {
     /**
      * Set this reader's {@link #execute() execution} to produce a {@link io.debezium.data.Envelope.Operation#READ} event for each
      * row.
-     * 
+     *
      * @return this object for method chaining; never null
      */
     public SnapshotReader generateReadEvents() {
@@ -101,7 +101,7 @@ public class SnapshotReader extends AbstractReader {
     /**
      * Set this reader's {@link #execute() execution} to produce a {@link io.debezium.data.Envelope.Operation#CREATE} event for
      * each row.
-     * 
+     *
      * @return this object for method chaining; never null
      */
     public SnapshotReader generateInsertEvents() {
@@ -203,7 +203,7 @@ public class SnapshotReader extends AbstractReader {
             // It also ensures that everything we do while we have this lock will be consistent.
             long lockAcquired = clock.currentTimeInMillis();
             logger.info("Step 2: flush and obtain global read lock (preventing writes to database)");
-            sql.set("FLUSH TABLES WITH READ LOCK");
+            sql.set("FLUSH TABLES user WITH READ LOCK");
             mysql.execute(sql.get());
 
             // ------
@@ -489,7 +489,7 @@ public class SnapshotReader extends AbstractReader {
      * technique</a> for MySQL by creating the JDBC {@link Statement} with {@link ResultSet#TYPE_FORWARD_ONLY forward-only} cursor
      * and {@link ResultSet#CONCUR_READ_ONLY read-only concurrency} flags, and with a {@link Integer#MIN_VALUE minimum value}
      * {@link Statement#setFetchSize(int) fetch size hint}.
-     * 
+     *
      * @param connection the JDBC connection; may not be null
      * @return the statement; never null
      * @throws SQLException if there is a problem creating the statement
@@ -544,7 +544,7 @@ public class SnapshotReader extends AbstractReader {
     /**
      * Utility method to replace the offset in the given record with the latest. This is used on the last record produced
      * during the snapshot.
-     * 
+     *
      * @param record the record
      * @return the updated record
      */
