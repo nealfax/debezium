@@ -203,7 +203,7 @@ public class SnapshotReader extends AbstractReader {
             // It also ensures that everything we do while we have this lock will be consistent.
             long lockAcquired = clock.currentTimeInMillis();
             logger.info("Step 2: flush and obtain global read lock (preventing writes to database)");
-            sql.set("FLUSH TABLES neal_test.user WITH READ LOCK");
+            sql.set("FLUSH TABLES neal_test.category WITH READ LOCK");
             mysql.execute(sql.get());
 
             // ------
